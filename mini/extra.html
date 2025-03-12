@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teacher Filter</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            display: flex;
+            width: 70%;
+            margin-left: 10%;
+        }
+
+        .filters {
+            width: 30%;
+            padding: 20px;
+            background-color: #f4f4f4;
+            box-sizing: border-box;
+            height: 100%;
+            overflow-y: auto;
+        }
+
+        .teachers {
+            width: 70%;
+            padding: 20px;
+            background-color: #ffffff;
+            box-sizing: border-box;
+            height: 100%;
+            overflow-y: auto;
+            border-left: 1px solid #ddd;
+        }
+
+        h2 {
+            text-align: center;
+        }
+
+        .filter-item {
+            margin-bottom: 15px;
+        }
+
+        .filter-item label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .filter-item input[type="checkbox"],
+        .filter-item input[type="radio"] {
+            margin-right: 10px;
+        }
+
+        .teacher-card {
+            display: flex;
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin-bottom: 10px;
+            background-color: #fafafa;
+            align-items: center;
+        }
+
+        .teacher-card img {
+            width: 80px;
+            height: 80px;
+            margin-right: 20px;
+            border-radius: 50%;
+        }
+
+        .teacher-card .teacher-details {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .teacher-card .teacher-details p {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Left Part: Filters -->
+        <div class="filters">
+            <h2>Filters</h2>
+            <form id="filterForm">
+                <div class="filter-item">
+                    <label>Subject:</label>
+                    <label><input type="checkbox" name="subject" value="english"> English</label>
+                    <label><input type="checkbox" name="subject" value="math"> Math</label>
+                    <label><input type="checkbox" name="subject" value="science"> Science</label>
+                    <label><input type="checkbox" name="subject" value="computer"> Computer</label>
+                </div>
+
+                <div class="filter-item">
+                    <label>Price:</label>
+                    <label><input type="radio" name="price" value="free" checked> Free</label>
+                    <label><input type="radio" name="price" value="paid"> Paid</label>
+                </div>
+
+                <div class="filter-item">
+                    <label>Country:</label>
+                    <label><input type="radio" name="country" value="india" checked> India</label>
+                    <label><input type="radio" name="country" value="america"> America</label>
+                </div>
+            </form>
+        </div>
+
+        <!-- Right Part: Teacher Information -->
+        <div class="teachers" id="teachers">
+            <h2>Teachers</h2>
+            <!-- Teacher Divs will be inserted here dynamically -->
+        </div>
+    </div>
+
+    <script>
+        // Sample teachers data (20 teachers)
+        const teachersData = [
+            {
+                name: "John Doe",
+                subject: "math",
+                medium: "english",
+                price: "paid",
+                charges: "100",
+                country: "india",
+                img: "https://via.placeholder.com/80?text=JD",
+            },
+            {
+                name: "Jane Smith",
+                subject: "english",
+                medium: "hindi",
+                price: "free",
+                charges: null,
+                country: "america",
+                img: "https://via.placeholder.com/80?text=JS",
+            },
+            {
+                name: "Alex Brown",
+                subject: "computer",
+                medium: "english",
+                price: "paid",
+                charges: "1000",
+                country: "india",
+                img: "https://via.placeholder.com/80?text=AB",
+            },
+            {
+                name: "Maria Garcia",
+                subject: "english",
+                medium: "english",
+                price: "free",
+                charges: null,
+                country: "america",
+                img: "https://via.placeholder.com/80?text=MG",
+            },
+            {
+                name: "David Lee",
+                subject: "science",
+                medium: "english",
+                price: "paid",
+                charges: "100",
+                country: "india",
+                img: "https://via.placeholder.com/80?text=DL",
+            },
+            {
+                name: "Emily Clark",
+                subject: "math",
+                medium: "english",
+                price: "paid",
+                charges: "500",
+                country: "america",
+                img: "https://via.placeholder.com/80?text=EC",
+            },
+            {
+                name: "Sophia Turner",
+                subject: "computer",
+                medium: "hindi",
+                price: "free",
+                charges: null,
+                country: "india",
+                img: "https://via.placeholder.com/80?text=ST",
+            },
+            {
+                name: "Henry Adams",
+                subject: "science",
+                medium: "english",
+                price: "paid",
+                charges: "1500",
+                country: "america",
+                img: "https://via.placeholder.com/80?text=HA",
+            },
+            {
+                name: "Nina Patel",
+                subject: "english",
+                medium: "punjabi",
+                price: "free",
+                charges: null,
+                country: "india",
+                img: "https://via.placeholder.com/80?text=NP",
+            },
+            {
+                name: "Liam White",
+                subject: "math",
+                medium: "english",
+                price: "paid",
+                charges: "200",
+                country: "america",
+                img: "https://via.placeholder.com/80?text=LW",
+            },
+            {
+                name: "Olivia Scott",
+                subject: "english",
+                medium: "english",
+                price: "paid",
+                charges: "1200",
+                country: "india",
+                img: "https://via.placeholder.com/80?text=OS",
+            },
+            {
+                name: "James Williams",
+                subject: "science",
+                medium: "hindi",
+                price: "paid",
+                charges: "1500",
+                country: "america",
+                img: "https://via.placeholder.com/80?text=JW",
+            },
+            {
+                name: "Lucas Rodriguez",
+                subject: "computer",
+                medium: "english",
+                price: "free",
+                charges: null,
+                country: "india",
+                img: "https://via.placeholder.com/80?text=LR",
+            },
+            {
+                name: "Amelia Martinez",
+                subject: "english",
+                medium: "english",
+                price: "paid",
+                charges: "300",
+                country: "america",
+                img: "https://via.placeholder.com/80?text=AM",
+            },
+            {
+                name: "Ethan Walker",
+                subject: "math",
+                medium: "english",
+                price: "free",
+                charges: null,
+                country: "india",
+                img: "https://via.placeholder.com/80?text=EW",
+            },
+            {
+                name: "Mason Lee",
+                subject: "science",
+                medium: "hindi",
+                price: "paid",
+                charges: "1000",
+                country: "america",
+                img: "https://via.placeholder.com/80?text=ML",
+            },
+            {
+                name: "Charlotte King",
+                subject: "computer",
+                medium: "english",
+                price: "paid",
+                charges: "1200",
+                country: "india",
+                img: "https://via.placeholder.com/80?text=CK",
+            },
+            {
+                name: "Amos Gray",
+                subject: "math",
+                medium: "english",
+                price: "free",
+                charges: null,
+                country: "america",
+                img: "https://via.placeholder.com/80?text=AG",
+            },
+            {
+                name: "Zoe Harris",
+                subject: "english",
+                medium: "punjabi",
+                price: "paid",
+                charges: "500",
+                country: "india",
+                img: "https://via.placeholder.com/80?text=ZH",
+            }
+        ];
+
+        // Filter teachers based on selected filters
+        function filterTeachers() {
+            const selectedSubjects = Array.from(document.querySelectorAll('input[name="subject"]:checked')).map(input => input.value);
+            const price = document.querySelector('input[name="price"]:checked').value;
+            const country = document.querySelector('input[name="country"]:checked').value;
+
+            const filteredTeachers = teachersData.filter(teacher => {
+                const subjectMatch = selectedSubjects.length === 0 || selectedSubjects.includes(teacher.subject);
+                const priceMatch = teacher.price === price;
+                const countryMatch = teacher.country === country;
+
+                return subjectMatch && priceMatch && countryMatch;
+            });
+
+            displayTeachers(filteredTeachers);
+        }
+
+        // Display filtered teachers
+        function displayTeachers(teachers) {
+            const teachersContainer = document.getElementById('teachers');
+            teachersContainer.innerHTML = ''; // Clear existing teachers
+
+            if (teachers.length === 0) {
+                teachersContainer.innerHTML = "<p>No teachers found matching the selected filters.</p>";
+            }
+
+            teachers.forEach(teacher => {
+                const teacherCard = document.createElement('div');
+                teacherCard.classList.add('teacher-card');
+
+                teacherCard.innerHTML = `
+                    <img src="${teacher.img}" alt="${teacher.name}">
+                    <div class="teacher-details">
+                        <p><strong>Name:</strong> ${teacher.name}</p>
+                        <p><strong>Subject:</strong> ${teacher.subject}</p>
+                        <p><strong>Medium:</strong> ${teacher.medium}</p>
+                        <p><strong>Price:</strong> ${teacher.price === 'free' ? 'Free' : teacher.charges + ' Rs/hour'}</p>
+                        <p><strong>Country:</strong> ${teacher.country}</p>
+                    </div>
+                `;
+                teachersContainer.appendChild(teacherCard);
+            });
+        }
+
+        // Initial display of teachers
+        filterTeachers();
+
+        // Add event listener for filter changes
+        document.getElementById('filterForm').addEventListener('change', filterTeachers);
+    </script>
+</body>
+</html>
